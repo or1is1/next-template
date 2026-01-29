@@ -1,3 +1,4 @@
+import tanstackQuery from "@tanstack/eslint-plugin-query";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import prettier from "eslint-config-prettier/flat";
@@ -19,9 +20,11 @@ const eslintConfig = defineConfig([
   {
     plugins: {
       drizzle,
+      "@tanstack/query": tanstackQuery,
     },
     rules: {
       ...drizzle.configs.recommended.rules,
+      ...tanstackQuery.configs.recommended.rules,
     },
   },
 ]);
