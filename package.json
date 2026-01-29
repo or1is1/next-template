@@ -14,7 +14,10 @@
     "db:pull": "drizzle-kit pull && ./scripts/move-drizzle-files.sh",
     "db:push": "drizzle-kit push",
     "db:gen": "drizzle-kit generate",
-    "db:mig": "drizzle-kit migrate"
+    "db:mig": "drizzle-kit migrate",
+    "db:chk": "drizzle-kit check",
+    "env": "vercel env pull .env",
+    "env:prd": "vercel env pull .env --environment production"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.10",
