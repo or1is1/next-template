@@ -1,3 +1,4 @@
+pnpx lint-staged
 pnpx next typegen
 tsc --noEmit
 prettier --write .
