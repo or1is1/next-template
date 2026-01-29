@@ -1,0 +1,3 @@
+pnpx next typegen
+tsc --noEmit
+prettier --write .
