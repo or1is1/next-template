@@ -28,7 +28,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <div className="flex h-screen flex-col items-center justify-center gap-4">
+            {children}
+          </div>
+        </TRPCReactProvider>
       </body>
     </html>
   );
