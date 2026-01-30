@@ -3,6 +3,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import prettier from "eslint-config-prettier/flat";
 import drizzle from "eslint-plugin-drizzle";
+import reactHooks from "eslint-plugin-react-hooks";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 const eslintConfig = defineConfig([
@@ -18,6 +19,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
   ]),
   {
+    extends: [reactHooks.configs.flat.recommended],
     plugins: {
       drizzle,
       "@tanstack/query": tanstackQuery,
