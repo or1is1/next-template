@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Template
 
-## Getting Started
+Next.js 기반의 풀스택 웹 애플리케이션 템플릿
 
-First, run the development server:
+## 환경 구성
+
+### 1. 의존성 설치
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm i
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. 환경 변수 설정
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`.env.example`을 `.env`로 복사 후 값 입력
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+BETTER_AUTH_SECRET=""
+BETTER_AUTH_URL="http://localhost:3000"
+DATABASE_URL="postgresql://..."    # PostgreSQL 연결 URL
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_ENVIRONMENT="development"
+```
 
-## Learn More
+"BETTER_AUTH_?" 의 값은 [better-auth 문서](https://www.better-auth.com/docs/installation#set-environment-variables)를 참고하여 생성할 수 있습니다.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. 데이터베이스 설정
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm db:push    # 스키마 동기화
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 로컬 실행
 
-## Deploy on Vercel
+```bash
+pnpm dev        # 개발 서버 실행 (http://localhost:3000)
+pnpm build      # 프로덕션 빌드
+pnpm start      # 프로덕션 서버 실행
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 배포
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Vercel 배포
+
+```bash
+pnpm env:prd    # 프로덕션 환경 변수 가져오기
+```
+
+환경 변수 설정 후 Vercel에 배포
+
+## 아키텍처
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # 인증 라우트 그룹
+│   ├── api/               # API 라우트
+│   └── post/              # 게시글 페이지
+├── feature/               # 도메인 로직
+│   └── post/
+│       ├── postEntity.ts      # 엔티티 정의
+│       ├── postRepository.ts  # 데이터 접근
+│       ├── postRoute.ts       # tRPC 라우트
+│       └── postStore.ts       # 상태 관리
+└── lib/                   # 공통 라이브러리
+    ├── auth/              # Better Auth 인증
+    ├── db/                # Drizzle ORM
+    └── trpc/              # tRPC 설정
+```
+
+### 기술 스택
+
+- **프레임워크**: Next.js 16 (App Router, React Compiler)
+- **인증**: Better Auth (이메일/비밀번호)
+- **데이터베이스**: PostgreSQL + Drizzle ORM
+- **API**: tRPC + TanStack Query
+- **상태 관리**: Zustand
+- **스타일링**: Tailwind CSS 4
+- **검증**: Zod
+- **타입 안전성**: TypeScript 5
+
+## 주요 의존성
+
+| 패키지                  | 용도                 |
+| ----------------------- | -------------------- |
+| `next`                  | React 프레임워크     |
+| `better-auth`           | 인증 시스템          |
+| `drizzle-orm`           | 타입 안전 ORM        |
+| `@trpc/server`          | 타입 안전 API        |
+| `@tanstack/react-query` | 서버 상태 관리       |
+| `zustand`               | 클라이언트 상태 관리 |
+| `zod`                   | 스키마 검증          |
+| `tailwindcss`           | 유틸리티 CSS         |
+| `typescript`            | 정적 타입 검사       |
+
+## 유용한 명령어
+
+```bash
+pnpm check      # TypeScript 타입 체크
+pnpm lint       # ESLint 검사
+pnpm format     # Prettier 포맷팅
+pnpm db:gen     # 마이그레이션 파일 생성
+pnpm db:pull    # DB 스키마 가져오기
+```
