@@ -15,6 +15,13 @@
       "when": 1768821957241,
       "tag": "0001_even_dust",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769871517169,
+      "tag": "0002_tense_old_lace",
+      "breakpoints": true
     }
   ]
 }

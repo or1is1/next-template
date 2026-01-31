@@ -1,4 +1,5 @@
 import {
+  bigint,
   boolean,
   foreignKey,
   index,
@@ -7,46 +8,6 @@ import {
   timestamp,
   unique,
 } from "drizzle-orm/pg-core";
-
-export const verification = pgTable(
-  "verification",
-  {
-    id: text().primaryKey().notNull(),
-    identifier: text().notNull(),
-    value: text().notNull(),
-    expiresAt: timestamp("expires_at", { mode: "string" }).notNull(),
-    createdAt: timestamp("created_at", { mode: "string" })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { mode: "string" })
-      .defaultNow()
-      .notNull(),
-  },
-  (table) => [
-    index("verification_identifier_idx").using(
-      "btree",
-      table.identifier.asc().nullsLast().op("text_ops"),
-    ),
-  ],
-);
-
-export const user = pgTable(
-  "user",
-  {
-    id: text().primaryKey().notNull(),
-    name: text().notNull(),
-    email: text().notNull(),
-    emailVerified: boolean("email_verified").default(false).notNull(),
-    image: text(),
-    createdAt: timestamp("created_at", { mode: "string" })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { mode: "string" })
-      .defaultNow()
-      .notNull(),
-  },
-  (table) => [unique("user_email_unique").on(table.email)],
-);
 
 export const account = pgTable(
   "account",
@@ -109,5 +70,72 @@ export const session = pgTable(
       name: "session_user_id_user_id_fk",
     }).onDelete("cascade"),
     unique("session_token_unique").on(table.token),
+  ],
+);
+
+export const verification = pgTable(
+  "verification",
+  {
+    id: text().primaryKey().notNull(),
+    identifier: text().notNull(),
+    value: text().notNull(),
+    expiresAt: timestamp("expires_at", { mode: "string" }).notNull(),
+    createdAt: timestamp("created_at", { mode: "string" })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { mode: "string" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("verification_identifier_idx").using(
+      "btree",
+      table.identifier.asc().nullsLast().op("text_ops"),
+    ),
+  ],
+);
+
+export const user = pgTable(
+  "user",
+  {
+    id: text().primaryKey().notNull(),
+    name: text().notNull(),
+    email: text().notNull(),
+    emailVerified: boolean("email_verified").default(false).notNull(),
+    image: text(),
+    createdAt: timestamp("created_at", { mode: "string" })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { mode: "string" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [unique("user_email_unique").on(table.email)],
+);
+
+export const post = pgTable(
+  "post",
+  {
+    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+    id: bigint({ mode: "number" }).generatedByDefaultAsIdentity({
+      name: "post_id_seq",
+      startWith: 1,
+      increment: 1,
+      minValue: 1,
+      maxValue: Number.MAX_SAFE_INTEGER,
+      cache: 1,
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .defaultNow()
+      .notNull(),
+    userId: text("user_id").notNull(),
+    content: text().notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.userId],
+      foreignColumns: [user.id],
+      name: "post_user_id_fkey",
+    }).onDelete("cascade"),
   ],
 );

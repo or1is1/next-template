@@ -41,7 +41,9 @@
     "server-only": "^0.0.1",
     "superjson": "^2.2.6",
     "tailwind-merge": "^3.4.0",
-    "zod": "^4.3.5"
+    "template": "link:",
+    "zod": "^4.3.5",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
